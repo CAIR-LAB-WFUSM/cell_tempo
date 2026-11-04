@@ -3,6 +3,7 @@
 from typing import Dict
 
 from torchvision import transforms
+from PIL import Image
 
 
 def build_transforms(cfg: Dict) -> Dict[str, transforms.Compose]:
@@ -58,7 +59,12 @@ def build_transforms(cfg: Dict) -> Dict[str, transforms.Compose]:
         train_aug.append(transforms.RandomHorizontalFlip())
         train_aug.append(transforms.RandomVerticalFlip())
     if cfg.get("random_rotation", True):
-        train_aug.append(transforms.RandomRotation(15))
+        train_aug.append(transforms.RandomChoice([
+            transforms.Lambda(lambda im: im),
+            transforms.Lambda(lambda im: im.transpose(Image.ROTATE_90)),
+            transforms.Lambda(lambda im: im.transpose(Image.ROTATE_180)),
+            transforms.Lambda(lambda im: im.transpose(Image.ROTATE_270)),
+        ]))
     if cfg.get("color_jitter", False):
         train_aug.append(transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2))
     train_aug.extend([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
