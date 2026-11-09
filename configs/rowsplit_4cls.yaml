@@ -1,9 +1,6 @@
 ﻿# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# Paper row-split with condition-matched well overrides
+# Fixed row split: rows A+B for training, row C for testing.
 # 4-class: MOI5/MOI1/MOI0.1/Mock, single-frame
-# Well overrides used in the paper split:
-#   - Run2: c2(moi1)â†’train, c3(moi01)â†’train, c4(mock)â†’train, a2(moi1)â†’test, a3(moi01)â†’test, a4(mock)â†’test
-#   - Run3: c1(moi01)â†’train, c2(moi5)â†’train, a1(moi01)â†’test, a2(moi5)â†’test
 # â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 experiment_name: rowsplit_4cls
 seed: 42
@@ -41,9 +38,6 @@ data:
         a4: mock
         b4: mock
         c4: mock
-      well_overrides:
-        c2: train    # moi1 â€” 4cls 0.1%/1.4%
-        a2: test     # moi1 â€” replaces c2
 
     - name: Run3
       dir: data/run3
@@ -60,9 +54,6 @@ data:
         a4: mock
         b4: mock
         c4: mock
-      well_overrides:
-        c2: train    # moi5 â€” 4cls 10%/7%
-        a2: test     # moi5 â€” replaces c2
 
   train_rows: [a, b]
   test_rows: [c]
@@ -79,7 +70,7 @@ data:
     - MOI0.1
     - Mock
 
-  batch_size: 300
+  batch_size: 96
   eval_batch_size_multiplier: 2
   num_workers: 8
 
@@ -113,17 +104,17 @@ model:
   use_cls_conditioning: false
 
 training:
-  epochs: 50
+  epochs: 30
   amp: true
   grad_clip: 1.0
-  eval_interval: 5
+  eval_interval: 30
 
 optimizer:
   lr: 0.0001
   weight_decay: 0.0001
 
 scheduler:
-  t_max: 50
+  t_max: 30
   eta_min: 1.0e-06
 
 

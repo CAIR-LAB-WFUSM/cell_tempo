@@ -1,4 +1,5 @@
 ﻿# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Fixed row split: rows A+B for training, row C for testing.
 # Binary cls-only, single-frame (ablation: no regression head)
 # Base: rowsplit_binary.yaml with regression_weight=0
 # â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -38,9 +39,6 @@ data:
         a4: mock
         b4: mock
         c4: mock
-      well_overrides:
-        c2: train
-        a2: test
 
     - name: Run3
       dir: data/run3
@@ -57,9 +55,6 @@ data:
         a4: mock
         b4: mock
         c4: mock
-      well_overrides:
-        c2: train
-        a2: test
 
   train_rows: [a, b]
   test_rows: [c]
@@ -74,7 +69,7 @@ data:
     - Infected
     - Mock
 
-  batch_size: 300
+  batch_size: 96
   eval_batch_size_multiplier: 2
   num_workers: 8
 
@@ -111,7 +106,7 @@ training:
   epochs: 30
   amp: true
   grad_clip: 1.0
-  eval_interval: 5
+  eval_interval: 30
 
 optimizer:
   lr: 0.0001
